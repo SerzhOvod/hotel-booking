@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 
@@ -8,8 +9,13 @@ import { getDestinations } from '../../services/destinationService';
 import { validateSearchForm } from '../../validation/searchValidation';
 
 function SearchForm() {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  const destinations = useSelector(state => state.destinations.items);
+
+  const loading = useSelector(state => state.destinations.loading);
+
+  const error = useSelector(state => state.destinations.error);
 
   const onSubmit = values => {
     console.log('Form values:', values);
@@ -17,19 +23,29 @@ function SearchForm() {
 
   useEffect(() => {
     async function loadDestinations() {
+      dispatch({
+        type: 'DESTINATIONS_LOADING',
+      });
+
       try {
         const data = await getDestinations();
 
-        setDestinations(data);
+        dispatch({
+          type: 'DESTINATIONS_SUCCESS',
+          payload: data,
+        });
       } catch (error) {
         console.error('Failed to load destinations:', error);
-      } finally {
-        setLoading(false);
+
+        dispatch({
+          type: 'DESTINATIONS_ERROR',
+          payload: 'Failed to load destinations',
+        });
       }
     }
 
     loadDestinations();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Form
@@ -51,7 +67,6 @@ function SearchForm() {
             mb: 2.5,
           }}
         >
-          {/* Destination */}
           <Field name="destination">
             {({ input, meta }) => (
               <TextField
@@ -62,9 +77,7 @@ function SearchForm() {
                 disabled={loading}
                 error={meta.touched && Boolean(meta.error)}
                 helperText={meta.touched && meta.error ? meta.error : ''}
-                sx={{
-                  flex: 2,
-                }}
+                sx={{ flex: 2 }}
               >
                 <MenuItem value="">Select destination</MenuItem>
 
@@ -77,7 +90,6 @@ function SearchForm() {
             )}
           </Field>
 
-          {/* Check in */}
           <Field name="checkIn">
             {({ input, meta }) => (
               <TextField
@@ -92,14 +104,11 @@ function SearchForm() {
                     shrink: true,
                   },
                 }}
-                sx={{
-                  flex: 2,
-                }}
+                sx={{ flex: 2 }}
               />
             )}
           </Field>
 
-          {/* Check out */}
           <Field name="checkOut">
             {({ input, meta }) => (
               <TextField
@@ -114,14 +123,11 @@ function SearchForm() {
                     shrink: true,
                   },
                 }}
-                sx={{
-                  flex: 2,
-                }}
+                sx={{ flex: 2 }}
               />
             )}
           </Field>
 
-          {/* Adults */}
           <Field name="adults">
             {({ input, meta }) => (
               <TextField
@@ -136,14 +142,11 @@ function SearchForm() {
                     min: 1,
                   },
                 }}
-                sx={{
-                  flex: 1,
-                }}
+                sx={{ flex: 1 }}
               />
             )}
           </Field>
 
-          {/* Children */}
           <Field name="children">
             {({ input }) => (
               <TextField
@@ -156,14 +159,11 @@ function SearchForm() {
                     min: 0,
                   },
                 }}
-                sx={{
-                  flex: 1,
-                }}
+                sx={{ flex: 1 }}
               />
             )}
           </Field>
 
-          {/* Submit */}
           <Button
             type="submit"
             variant="contained"
@@ -180,6 +180,8 @@ function SearchForm() {
           >
             SUBMIT
           </Button>
+
+          {error && <Box sx={{ color: 'red' }}>{error}</Box>}
         </Box>
       )}
     />
