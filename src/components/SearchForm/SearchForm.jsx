@@ -1,13 +1,35 @@
+import { useEffect, useState } from 'react';
+
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 
 import { Form, Field } from 'react-final-form';
 
+import { getDestinations } from '../../services/destinationService';
 import { validateSearchForm } from '../../validation/searchValidation';
 
 function SearchForm() {
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const onSubmit = values => {
     console.log('Form values:', values);
   };
+
+  useEffect(() => {
+    async function loadDestinations() {
+      try {
+        const data = await getDestinations();
+
+        setDestinations(data);
+      } catch (error) {
+        console.error('Failed to load destinations:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDestinations();
+  }, []);
 
   return (
     <Form
@@ -37,17 +59,20 @@ function SearchForm() {
                 select
                 label="Destination"
                 size="small"
+                disabled={loading}
                 error={meta.touched && Boolean(meta.error)}
                 helperText={meta.touched && meta.error ? meta.error : ''}
                 sx={{
                   flex: 2,
                 }}
               >
-                <MenuItem value="New York">New York</MenuItem>
+                <MenuItem value="">Select destination</MenuItem>
 
-                <MenuItem value="Kyiv">Kyiv</MenuItem>
-
-                <MenuItem value="London">London</MenuItem>
+                {destinations.map(destination => (
+                  <MenuItem key={destination.id} value={destination.value}>
+                    {destination.label}
+                  </MenuItem>
+                ))}
               </TextField>
             )}
           </Field>
@@ -98,12 +123,14 @@ function SearchForm() {
 
           {/* Adults */}
           <Field name="adults">
-            {({ input }) => (
+            {({ input, meta }) => (
               <TextField
                 {...input}
                 type="number"
                 label="Adults"
                 size="small"
+                error={meta.touched && Boolean(meta.error)}
+                helperText={meta.touched && meta.error ? meta.error : ''}
                 slotProps={{
                   htmlInput: {
                     min: 1,
@@ -136,6 +163,7 @@ function SearchForm() {
             )}
           </Field>
 
+          {/* Submit */}
           <Button
             type="submit"
             variant="contained"
