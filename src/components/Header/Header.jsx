@@ -32,6 +32,8 @@ function Header() {
           }}
         >
           <Box
+            component={NavLink}
+            to="/"
             sx={{
               width: 40,
               height: 40,

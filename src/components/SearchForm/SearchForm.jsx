@@ -23,8 +23,6 @@ function SearchForm() {
 
   const hotelsSuccess = useSelector(state => state.hotels.success);
 
-  const hotels = useSelector(state => state.hotels.items);
-
   useEffect(() => {
     dispatch({
       type: 'DESTINATIONS_REQUEST',
