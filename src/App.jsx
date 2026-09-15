@@ -3,10 +3,12 @@
 
 import './App.css';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import Main from './pages/Main/Main';
 
 function App() {
   return (
-    <div>
+    <>
       <Header />
 
       {/* <>
@@ -20,11 +22,10 @@ function App() {
       </BrowserRouter>
      </> */}
 
-      <main>
-        <h1>Hotel Booking</h1>
-        <p>React diploma project</p>
-      </main>
-    </div>
+      <Main />
+
+      <Footer />
+    </>
   );
 }
 
