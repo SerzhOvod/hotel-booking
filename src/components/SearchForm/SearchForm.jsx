@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 
 import { Form, Field } from 'react-final-form';
 
-import { getDestinations } from '../../services/destinationService';
 import { validateSearchForm } from '../../validation/searchValidation';
 
 function SearchForm() {
@@ -17,35 +17,36 @@ function SearchForm() {
 
   const error = useSelector(state => state.destinations.error);
 
-  const onSubmit = values => {
-    console.log('Form values:', values);
-  };
+  const navigate = useNavigate();
+
+  const hotelsLoading = useSelector(state => state.hotels.loading);
+
+  const hotelsSuccess = useSelector(state => state.hotels.success);
+
+  const hotels = useSelector(state => state.hotels.items);
 
   useEffect(() => {
-    async function loadDestinations() {
-      dispatch({
-        type: 'DESTINATIONS_LOADING',
-      });
-
-      try {
-        const data = await getDestinations();
-
-        dispatch({
-          type: 'DESTINATIONS_SUCCESS',
-          payload: data,
-        });
-      } catch (error) {
-        console.error('Failed to load destinations:', error);
-
-        dispatch({
-          type: 'DESTINATIONS_ERROR',
-          payload: 'Failed to load destinations',
-        });
-      }
-    }
-
-    loadDestinations();
+    dispatch({
+      type: 'DESTINATIONS_REQUEST',
+    });
   }, [dispatch]);
+
+  useEffect(() => {
+    if (hotelsSuccess) {
+      navigate('/hotels');
+    }
+  }, [hotelsSuccess, navigate]);
+
+  const onSubmit = values => {
+    dispatch({
+      type: 'HOTELS_LOADING',
+    });
+
+    dispatch({
+      type: 'SEARCH_HOTELS_REQUEST',
+      payload: values,
+    });
+  };
 
   return (
     <Form
@@ -167,6 +168,7 @@ function SearchForm() {
           <Button
             type="submit"
             variant="contained"
+            disabled={hotelsLoading}
             sx={{
               height: 40,
               px: 3,
@@ -178,7 +180,7 @@ function SearchForm() {
               },
             }}
           >
-            SUBMIT
+            {hotelsLoading ? 'SEARCHING...' : 'SUBMIT'}
           </Button>
 
           {error && <Box sx={{ color: 'red' }}>{error}</Box>}
