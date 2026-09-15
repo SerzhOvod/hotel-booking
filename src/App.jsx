@@ -1,10 +1,10 @@
 // import { useState } from 'react';
 // import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import './App.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import Main from './pages/Main/Main';
+// import Main from './pages/Main/Main';
+import Hotels from './pages/Hotels/Hotels';
 
 function App() {
   return (
@@ -22,7 +22,9 @@ function App() {
       </BrowserRouter>
      </> */}
 
-      <Main />
+      {/* <Main /> */}
+
+      <Hotels />
 
       <Footer />
     </>
