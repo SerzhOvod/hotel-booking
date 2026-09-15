@@ -1,92 +1,72 @@
-import { Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
+
+import { useSelector } from 'react-redux';
 
 import HotelCard from '../../components/HotelCard/HotelCard';
 
-const hotels = [
-  {
-    id: 1,
-    name: 'Woogo Central Park - Tempo Apartments',
-    address: '240 West 73rd Street',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-  {
-    id: 2,
-    name: 'Amolite Hotel',
-    address: 'Avenida Curitiba, 811',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-  {
-    id: 3,
-    name: 'Redford Hotel',
-    address: '136 Ludlow Street',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-  {
-    id: 4,
-    name: 'Hotel Richland New York',
-    address: '5 Allen Street',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-  {
-    id: 5,
-    name: 'Studio Lux Times Square',
-    address: 'between 9 Avenue and 8 Avenue',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-  {
-    id: 6,
-    name: 'The Bowery Hotel',
-    address: '335 Bowery',
-    city: 'New York',
-    state: 'NY',
-    countryCode: 'US',
-  },
-];
-
 function Hotels() {
+  const hotels = useSelector(state => state.hotels.items);
+
+  const search = useSelector(state => state.hotels.search);
+
+  const loading = useSelector(state => state.hotels.loading);
+
+  const error = useSelector(state => state.hotels.error);
+
   return (
     <Container
-      maxWidth={false}
+      maxWidth="lg"
       sx={{
-        maxWidth: '1000px',
-        py: 2,
+        py: {
+          xs: 4,
+          md: 6,
+        },
       }}
     >
-      <Typography
-        component="h1"
-        sx={{
-          fontSize: '22px',
-          fontWeight: 400,
-          mb: 1,
-        }}
-      >
-        Hotels
-      </Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            mb: 1,
+          }}
+        >
+          Hotels
+        </Typography>
 
-      <Grid container spacing={3}>
-        {hotels.map(hotel => (
-          <Grid
-            key={hotel.id}
-            size={{
-              xs: 12,
-              sm: 6,
-              md: 4,
-            }}
-          >
-            <HotelCard hotel={hotel} />
-          </Grid>
-        ))}
-      </Grid>
+        {search?.destination && (
+          <Typography variant="body1" color="text.secondary">
+            Search results for <strong>{search.destination.label}</strong>
+          </Typography>
+        )}
+      </Box>
+
+      {loading && <Typography>Loading hotels...</Typography>}
+
+      {error && <Typography color="error">{error}</Typography>}
+
+      {!loading && !error && hotels.length === 0 && (
+        <Typography color="text.secondary">No hotels found.</Typography>
+      )}
+
+      {!loading && !error && hotels.length > 0 && (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            },
+            gap: 3,
+          }}
+        >
+          {hotels.map(hotel => (
+            <HotelCard key={hotel.id} hotel={hotel} />
+          ))}
+        </Box>
+      )}
     </Container>
   );
 }

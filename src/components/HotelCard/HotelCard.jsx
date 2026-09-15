@@ -1,67 +1,98 @@
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Rating,
+  Typography,
+} from '@mui/material';
 
 function HotelCard({ hotel }) {
   return (
     <Card
       sx={{
-        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         borderRadius: 0,
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
       }}
     >
       <Box
         sx={{
-          height: 120,
-          backgroundColor: '#ccc',
+          height: 180,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#aaa',
-          fontSize: '22px',
+          backgroundColor: '#eeeeee',
         }}
       >
-        140 x 140
+        <Typography variant="body2" color="text.secondary">
+          Hotel image
+        </Typography>
       </Box>
 
       <CardContent
         sx={{
-          padding: '12px 14px',
-          '&:last-child': {
-            paddingBottom: '12px',
-          },
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
         }}
       >
         <Typography
+          variant="h6"
           component="h2"
           sx={{
-            fontSize: '20px',
-            lineHeight: 1.2,
-            mb: 1.5,
+            mb: 1,
+            fontWeight: 600,
           }}
         >
           {hotel.name}
         </Typography>
 
-        <Typography
-          sx={{
-            fontSize: '12px',
-            color: '#777',
-            lineHeight: 1.4,
-          }}
-        >
-          address: {hotel.address}
+        <Box sx={{ mb: 1.5 }}>
+          <Rating
+            value={hotel.hotel_rating || 0}
+            precision={0.5}
+            readOnly
+            size="small"
+          />
+        </Box>
+
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+          {hotel.address}
         </Typography>
 
-        <Typography
+        <Typography variant="body2" color="text.secondary">
+          {hotel.city}
+          {hotel.state ? `, ${hotel.state}` : ''}
+        </Typography>
+
+        {hotel.phone_number && (
+          <>
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="body2">{hotel.phone_number}</Typography>
+          </>
+        )}
+
+        <Box
           sx={{
-            fontSize: '12px',
-            color: '#777',
-            lineHeight: 1.4,
+            mt: 'auto',
+            pt: 2,
           }}
         >
-          city: {hotel.city}, state: {hotel.state}, country code:{' '}
-          {hotel.countryCode}
-        </Typography>
+          <Button
+            variant="outlined"
+            fullWidth
+            sx={{
+              borderRadius: 0,
+            }}
+          >
+            VIEW HOTEL
+          </Button>
+        </Box>
       </CardContent>
     </Card>
   );
