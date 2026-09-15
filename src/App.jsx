@@ -3,8 +3,8 @@
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-// import Main from './pages/Main/Main';
-import Hotels from './pages/Hotels/Hotels';
+
+import AppRouter from './routes/AppRouter';
 
 function App() {
   return (
@@ -22,9 +22,7 @@ function App() {
       </BrowserRouter>
      </> */}
 
-      {/* <Main /> */}
-
-      <Hotels />
+      <AppRouter />
 
       <Footer />
     </>

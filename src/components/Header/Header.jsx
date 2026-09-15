@@ -1,5 +1,7 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 
+import { NavLink } from 'react-router-dom';
+
 function Header() {
   return (
     <Box
@@ -57,6 +59,8 @@ function Header() {
           }}
         >
           <Button
+            component={NavLink}
+            to="/"
             variant="contained"
             sx={{
               backgroundColor: '#f9a000',
@@ -71,6 +75,8 @@ function Header() {
           </Button>
 
           <Button
+            component={NavLink}
+            to="/about"
             variant="contained"
             sx={{
               backgroundColor: '#f9a000',
