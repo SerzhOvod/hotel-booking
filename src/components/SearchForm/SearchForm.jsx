@@ -32,8 +32,12 @@ function SearchForm() {
   useEffect(() => {
     if (hotelsSuccess) {
       navigate('/hotels');
+
+      dispatch({
+        type: 'HOTELS_RESET_SUCCESS',
+      });
     }
-  }, [hotelsSuccess, navigate]);
+  }, [hotelsSuccess, navigate, dispatch]);
 
   const onSubmit = values => {
     dispatch({

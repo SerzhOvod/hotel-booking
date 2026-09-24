@@ -1,6 +1,5 @@
 import { Box, Button, Container, Typography } from '@mui/material';
-
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function Header() {
   return (
@@ -25,15 +24,16 @@ function Header() {
       >
         {/* Logo */}
         <Box
+          component={Link}
+          to="/"
           sx={{
             display: 'flex',
             alignItems: 'center',
             gap: 1,
+            textDecoration: 'none',
           }}
         >
           <Box
-            component={NavLink}
-            to="/"
             sx={{
               width: 40,
               height: 40,
@@ -61,7 +61,7 @@ function Header() {
           }}
         >
           <Button
-            component={NavLink}
+            component={Link}
             to="/"
             variant="contained"
             sx={{

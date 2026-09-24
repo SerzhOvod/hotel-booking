@@ -34,6 +34,12 @@ export function hotelsReducer(state = initialState, action) {
         error: action.payload,
       };
 
+    case 'HOTELS_RESET_SUCCESS':
+      return {
+        ...state,
+        success: false,
+      };
+
     default:
       return state;
   }
