@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 
 import HotelCard from './HotelCard';
 
@@ -13,9 +14,17 @@ const hotel = {
   phone_number: '+1 212-759-3000',
 };
 
+function renderHotelCard() {
+  return render(
+    <MemoryRouter>
+      <HotelCard hotel={hotel} />
+    </MemoryRouter>,
+  );
+}
+
 describe('HotelCard', () => {
   test('renders hotel name', () => {
-    render(<HotelCard hotel={hotel} />);
+    renderHotelCard();
 
     expect(
       screen.getByRole('heading', {
@@ -25,7 +34,7 @@ describe('HotelCard', () => {
   });
 
   test('renders hotel address and city', () => {
-    render(<HotelCard hotel={hotel} />);
+    renderHotelCard();
 
     expect(screen.getByText('768 5th Ave')).toBeInTheDocument();
 
@@ -33,7 +42,7 @@ describe('HotelCard', () => {
   });
 
   test('renders View Hotel button', () => {
-    render(<HotelCard hotel={hotel} />);
+    renderHotelCard();
 
     expect(
       screen.getByRole('button', {

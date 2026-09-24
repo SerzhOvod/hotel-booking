@@ -8,7 +8,15 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useNavigate } from 'react-router-dom';
+
 function HotelCard({ hotel }) {
+  const navigate = useNavigate();
+
+  const handleViewHotel = () => {
+    navigate(`/hotels/${hotel.id}`);
+  };
+
   return (
     <Card
       sx={{
@@ -22,15 +30,36 @@ function HotelCard({ hotel }) {
       <Box
         sx={{
           height: 180,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          overflow: 'hidden',
           backgroundColor: '#eeeeee',
         }}
       >
-        <Typography variant="body2" color="text.secondary">
-          Hotel image
-        </Typography>
+        {hotel.images?.[0] || hotel.image_url || hotel.image ? (
+          <Box
+            component="img"
+            src={hotel.images?.[0] || hotel.image_url || hotel.image}
+            alt={hotel.name}
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        ) : (
+          <Box
+            sx={{
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Hotel image
+            </Typography>
+          </Box>
+        )}
       </Box>
 
       <CardContent
@@ -40,14 +69,7 @@ function HotelCard({ hotel }) {
           flexGrow: 1,
         }}
       >
-        <Typography
-          variant="h6"
-          component="h2"
-          sx={{
-            mb: 1,
-            fontWeight: 600,
-          }}
-        >
+        <Typography variant="h6" component="h2" sx={{ mb: 1, fontWeight: 600 }}>
           {hotel.name}
         </Typography>
 
@@ -72,23 +94,16 @@ function HotelCard({ hotel }) {
         {hotel.phone_number && (
           <>
             <Divider sx={{ my: 2 }} />
-
             <Typography variant="body2">{hotel.phone_number}</Typography>
           </>
         )}
 
-        <Box
-          sx={{
-            mt: 'auto',
-            pt: 2,
-          }}
-        >
+        <Box sx={{ mt: 'auto', pt: 2 }}>
           <Button
             variant="outlined"
             fullWidth
-            sx={{
-              borderRadius: 0,
-            }}
+            onClick={handleViewHotel}
+            sx={{ borderRadius: 0 }}
           >
             VIEW HOTEL
           </Button>
