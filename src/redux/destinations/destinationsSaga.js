@@ -4,6 +4,10 @@ import { getDestinations } from '../../services/destinationService';
 
 function* fetchDestinationsSaga() {
   try {
+    yield put({
+      type: 'DESTINATIONS_LOADING',
+    });
+
     const data = yield call(getDestinations);
 
     yield put({
