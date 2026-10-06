@@ -6,14 +6,19 @@ import { fileURLToPath } from 'url';
 
 const app = express();
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const dbPath = path.join(__dirname, 'db.json');
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://serzhovod.github.io'],
+  }),
+);
+
 app.use(express.json());
 
 function getDatabase() {
@@ -63,7 +68,6 @@ app.post('/api/hotels/search', (req, res) => {
   });
 });
 
-// LISTEN
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
